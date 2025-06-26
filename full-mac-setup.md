@@ -10,20 +10,20 @@ Before starting, I completed Apple's mandatory macOS setup wizard (creating a lo
 
   - Install Ansible (following the guide in [README.md](README.md))
   - **Sign in to App Store** (since `mas` can't sign in automatically)
-  - Clone mac-dev-playbook to the Mac: `git clone git@github.com:geerlingguy/mac-dev-playbook.git`
-  - Drop `config.yml` from `~/Dropbox/Apps/Config` to the playbook (copy over the network or using a USB flash drive).
+  - Clone mac-dev-playbook to the Mac: `git clone git@github.com:julianobarbosa/mac-dev-playbook.git`
+  - Drop `config.yml` from `~/OneDrive\ -\Hypera/MacOS/Apps/Config` to the playbook (copy over the network or using a USB flash drive).
   - Run the playbook.
     - If there are errors, you may need to finish up other tasks like installing 'old-fashioned' apps first (since I try to place Photoshop in the Dock and it can't be installed automatically). Then, run the playbook again ;)
   - Start Synchronization tasks:
     - Open Photos and make sure iCloud sync options are correct
     - Open Music, make sure computer is authorized, and set Library sync options
-    - Open Dropbox, sign in, and set up sync
+    - Open OneDrive, sign in, and set up sync
   - Install or complete setup for old-fashioned apps:
     - Open Creative Cloud, sign in, and install needed apps
     - Open iStat Menus and configure CPU/Net/Temp Combined view
     - (If required:)
       - Install [Elgato Stream Deck](https://www.elgato.com/en/downloads)
-        - Open Livestream profile inside `~/Dropbox/Apps/Config/Stream Deck`
+        - Open Livestream profile inside `~/OneDrive\ -\ Hypera/MacOS/Apps/Config/Stream Deck`
       - Install [Elgato Key Light Air (Control Center)](https://www.elgato.com/en/downloads)
       - Install [Autodesk Fusion 360](https://www.autodesk.com)
       - Install Microsoft Office Home & Student 2019 (https://account.microsoft.com/services/)
@@ -52,7 +52,7 @@ Before starting, I completed Apple's mandatory macOS setup wizard (creating a lo
       - Preferences > Advanced > "Show features for web developers"
       - Install the 'Return YouTube Dislike' Userscript in Userscripts
     - Dock:
-      - Add jgeerling, Downloads, Applications, and shared "mercury" folders
+      - Add juliano.barbosa, Downloads, Applications, and shared "mercury" folders
   - Final Cut Pro
     - Install FxFactory and sign in: https://fxfactory.com
     - Copy contents of `~/Development/youtube/fcpx` into respective directories
@@ -62,55 +62,39 @@ Before starting, I completed Apple's mandatory macOS setup wizard (creating a lo
 
 ## To Wrap in Post-provision automation
 
-The following tasks have to wait for the initial Dropbox sync to complete before they'll succeed. So ideally I'll stick this all in a post-provision script but somehow flag it not to run on first provision.
+The following tasks have to wait for the initial OneDrive sync to complete before they'll succeed. So ideally I'll stick this all in a post-provision script but somehow flag it not to run on first provision.
 
 ```
 # ZSH Aliases.
-ln -s /Users/jgeerling/Dropbox/Apps/Config/.aliases /Users/jgeerling/.aliases
+ln -s /Users/juliano.barbosa/OneDrive\ -\ Hypera/MacOS/.aliases /Users/juliano.barbosa/.aliases
 
 # Electrum BTC Wallet (open Electrum first).
-ln -s /Users/jgeerling/Dropbox/Apps/Electrum/default_wallet /Users/jgeerling/.electrum/wallets/default_wallet
-
-# SSH setup.
-ssh-keygen  # and create a default key to set up .ssh folder
-sudo ln -s /Users/jgeerling/Dropbox/Apps/Config/ssh/config ~/.ssh/config
-# TODO - Manually copy any shared SSH keys that are needed.
+ln -s /Users/juliano.barbosa/OneDrive\ -\ Hypera/MacOS/.electrum /Users/juliano.barbosa/.electrum
 
 # Ansible setup.
 sudo mkdir -p /etc/ansible
-sudo ln -s /Users/jgeerling/Dropbox/Apps/Config/ansible/ansible.cfg /etc/ansible/ansible.cfg
-sudo ln -s /Users/jgeerling/Dropbox/Apps/Config/ansible/hosts /etc/ansible/hosts
-sudo ln -s /Users/jgeerling/Dropbox/VMs/roles /etc/ansible/roles
-mkdir -p /Users/jgeerling/.ansible
-ln -s /Users/jgeerling/Dropbox/Apps/Config/ansible/galaxy_token /Users/jgeerling/.ansible/galaxy_token
-ln -s /Users/jgeerling/Dropbox/Apps/Config/ansible/mm-vault-password.txt /Users/jgeerling/.ansible/mm-vault-password.txt
-ln -s /Users/jgeerling/Dropbox/VMs/ansible_collections /Users/jgeerling/.ansible/collections
+sudo ln -s /Users/juliano.barbosa/OneDrive\ -\ Hypera/MacOS/Apps/Config/ansible/ansible.cfg /etc/ansible/ansible.cfg
+sudo ln -s /Users/juliano.barbosa/OneDrive\ -\ Hypera/Apps/Config/ansible/hosts /etc/ansible/hosts
+mkdir -p /Users/juliano.barbosa/.ansible
+ln -s /Users/juliano.barbosa/OneDrive\ -\ Hypera/MacOS/.ansible/galaxy_token /Users/juliano.barbosa/.ansible/galaxy_token
+ln -s /Users/juliano.barbosa/OneDrive\ -\ Hypera/MacOS/Apps/Config/ansible/mm-vault-password.txt /Users/juliano.barbosa/.ansible/mm-vault-password.txt
 
 # Final Cut Pro setup. (Open Motion first)
-cp -r /Users/jgeerling/Dropbox/Apps/Config/Motion/Motion\ Templates.localized/ /Users/jgeerling/Movies/Motion\ Templates.localized/
-cp -r /Users/jgeerling/Dropbox/Apps/Config/Motion/Text\ Styles/ /Users/jgeerling/Library/Application\ Support/Motion/Library/Text\ Styles.localized/
+cp -r /Users/juliano.barbosa/OneDrive\ -\ Hypera/MacOS/Apps/Config/Motion/Motion\ Templates.localized/ /Users/juliano.barbosa/Movies/Motion\ Templates.localized/
+cp -r /Users/juliano.barbosa/OneDrive\ -\ Hypera/MacOS/Apps/Config/Motion/Text\ Styles/ /Users/juliano.barbosa/Library/Application\ Support/Motion/Library/Text\ Styles.localized/
 
 # Sequel Ace favorites. (Open Sequel Ace first)
-cp /Users/jgeerling/Dropbox/Apps/Config/Sequel\ Ace/Favorites.plist /Users/jgeerling/Library/Containers/com.sequel-ace.sequel-ace/Data/Library/Application\ Support/Sequel\ Ace/Data/Favorites.plist
+cp /Users/juliano.barbosa/OneDrive\ -\ Hypera/MacOS/Apps/Config/Sequel\ Ace/Favorites.plist /Users/juliano.barbosa/Library/Containers/com.sequel-ace.sequel-ace/Data/Library/Application\ Support/Sequel\ Ace/Data/Favorites.plist
 
 # Font setup.
-cp ~/Dropbox/Apps/Config/Fonts/* ~/Library/Fonts/
-
-# Vim setup.
-mkdir -p ~/.vim/autoload
-mkdir -p ~/.vim/bundle
-cd ~/.vim/autoload
-curl https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim > pathogen.vim
-cd ~/.vim/bundle
-git clone https://github.com/preservim/nerdtree.git
-```
+cp ~/OneDrive\ -\ Hypera/MacOS/Apps/Config/Fonts/* ~/Library/Fonts/
 
 ## When formatting old Mac
 
   - Sign out of Adobe Creative Cloud
   - Sign out of Panic Sync in Transmit
   - Deauthorize Apple Music in iTunes/Music App
-  - Make sure anything new merged into `~/Dropbox/Apps/Config`:
+  - Make sure anything new merged into `~/OneDrive\ -\ Hypera/MacOS/Apps/Config`:
     - Fonts from ~/Library/Fonts
     - Motion Plugins from ~/Movies/Motion
     - Final Cut Pro Text Styles in ~/Library/Application Support/Motion/Library/Text Styles
